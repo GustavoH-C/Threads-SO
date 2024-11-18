@@ -1,40 +1,22 @@
-# Makefile by gabriel-dp!
+CC = gcc
+CFLAGS = -fopenmp -Wall -g -I./src
+SRC = src/main.c src/exe.c
+OBJ = src/main.o src/exe.o
+EXEC = programa
 
-# Defines C Compiler
-CC := gcc
+all: $(EXEC)
 
-# Final file name
-BINARY := out
+$(EXEC): $(OBJ)
+	$(CC) $(OBJ) -o $(EXEC) -fopenmp -lm
 
-# Code directory structure
-BINDIR := bin
-BUILDDIR := build
-INCDIR := include	
-SRCDIR := src
+src/main.o: src/main.c src/trab.h
+	$(CC) $(CFLAGS) -c src/main.c -o src/main.o
 
-# Compiler flags
-CFLAGS := -Wall -I $(INCDIR)
+src/exe.o: src/exe.c src/trab.h 
+	$(CC) $(CFLAGS) -c src/exe.c -o src/exe.o   # Corrigido para exe.c
 
-# Linker flags
-LDFLAGS := -lm
+clean:
+	rm -f $(OBJ) $(EXEC)
 
-# %.o file names
-NAMES := $(notdir $(basename $(wildcard $(SRCDIR)/*.c)))
-OBJECTS :=$(patsubst %,$(BUILDDIR)/%.o,$(NAMES))
-
-
-# Rule for link and generate the binary file
-all: $(OBJECTS)
-	@ if [ ! -d ./$(BINDIR) ]; then mkdir -p $(BINDIR);	fi
-	$(CC) -o $(BINDIR)/$(BINARY) $+ $(LDFLAGS)
-
-# Rule for object binaries compilation
-$(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	@ if [ ! -d ./$(BUILDDIR) ]; then mkdir -p $(BUILDDIR);fi
-	$(CC) -c $^ -o $@ $(CFLAGS) 
-
-
-# Clean BIN and BUILD dirs
-.PHONY: clean
-clean: 
-	rm -rf $(BUILDDIR) $(BINDIR) $(BINDIR)/$(BINARY)
+run: $(EXEC)
+	./$(EXEC)
