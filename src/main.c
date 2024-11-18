@@ -1,15 +1,13 @@
 #include <stdio.h>
-#include <omp.h>
-#include "../include/trab.h"
+#include "trab.h"
 
-int conta = 0;
-int vencedor = -1;
-int tamanho = 0;
 
 int main() {
-    
-    printf("Digite até quanto as threads devem contar\n");
-    scanf("%d", &tamanho);
-    competicao(conta, vencedor, tamanho);
+    int num_threads = 4;
+
+    competicao(num_threads, 100);
+
+    printf("A thread que chegou foi a thread %d.\n", vencedor);
+
     return 0;
 }
